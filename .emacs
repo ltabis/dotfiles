@@ -42,7 +42,7 @@
 (global-unset-key (kbd "<M-down>"))
 
 ;; set backup files into .emacs_saves.
-(setq backup-directory-alist '(("." . "~/.emacs_saves")))
+(setq backup-directory-alist '(("." . "~/.emacs.saves")))
 
 ;; ido mode provide nice utilities for searching files & buffers.
 (require 'ido)
@@ -71,4 +71,4 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; (load "~/.emacs.modes")
+(load "~/.emacs.modes/rust.el")
