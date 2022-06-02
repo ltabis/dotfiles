@@ -20,7 +20,8 @@
   ;; uncomment for less flashiness
   ;; (setq lsp-eldoc-hook nil)
   ;; (setq lsp-enable-symbol-highlighting nil)
-  ;; (setq lsp-signature-auto-activate nil)
+  (setq lsp-signature-auto-activate nil)
+  (setq rustic-compile-display-method 'ignore)
 
   ;; comment to disable rustfmt on save
   (setq rustic-format-on-save t)
