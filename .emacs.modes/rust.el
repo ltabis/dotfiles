@@ -15,7 +15,9 @@
               ("C-c C-c r" . lsp-rename)
               ("C-c C-c q" . lsp-workspace-restart)
               ("C-c C-c Q" . lsp-workspace-shutdown)
-              ("C-c C-c s" . lsp-rust-analyzer-status))
+              ("C-c C-c s" . lsp-rust-analyzer-status)
+	      ("C-c C-c m" . rust-toggle-mutability)
+	      ("C-c C-c d" . rust-dbg-wrap-or-unwrap))
   :config
   ;; uncomment for less flashiness
   ;; (setq lsp-eldoc-hook nil)
