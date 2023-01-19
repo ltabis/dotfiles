@@ -87,6 +87,11 @@
 (setq auto-mode-alist (cons '("\\.vsl$" . rust-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhai$" . rust-mode) auto-mode-alist))
 
+;; org mode.
+(global-set-key (kbd "C-c l") #'org-store-link)
+(global-set-key (kbd "C-c a") #'org-agenda)
+(global-set-key (kbd "C-c c") #'org-capture)
+
 ;; load modes
 (load "~/.emacs.modes/rust.el")
 (put 'upcase-region 'disabled nil)
