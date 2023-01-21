@@ -51,3 +51,4 @@
 
 ;; Get TL;DR paragraphs for any softare.
 (package! tldr)
+(package! beacon)

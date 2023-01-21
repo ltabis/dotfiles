@@ -38,25 +38,29 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
 (after! org
+  ;; If you use `org' and don't want your org files in the default location below,
+  ;; change `org-directory'.
+  (setq org-directory "~/org/")
+
   ;; org files registered into the agenda.
   (setq org-agenda-files '("~/org/todo.org" "~/org/agenda.org"))
 
   ;; Register new templates here.
   (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+      '(
+        ("t" "simple todo" entry (file+headline "~/org/todo.org" "Tasks")
+         "* TODO %?\n  %i\n")
+
+        ("a" "tracked todo" entry (file+headline "~/org/todo.org" "Tasks")
          "* TODO %?\n  %i\n  %a")
-        ("j" "Journal" entry (file+datetree "~/org/journal.org")
-         "* %?\nEntered on %U\n  %i\n  %a")))
+
+        ("i" "simple idea" entry (file+headline "~/org/idea.org" "Ideas")
+         "* IDEA %?\n  %i\n")
+
+        ("j" "journal entry" entry (file+datetree "~/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a"))
+      )
 )
 
-(after! multiple-cursors
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-)
+(beacon-mode 1)
