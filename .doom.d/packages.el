@@ -49,6 +49,14 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-;; Get TL;DR paragraphs for any softare.
+;; Get TL;DR paragraphs for any sofwtare.
 (package! tldr)
+;; Highlight the cursor when it jumps around.
 (package! beacon)
+
+;; Org packages
+
+;; necessary for org roam v2 and ui
+(unpin! org-roam)
+(package! org-roam-ui)
+(package! org-pomodoro)

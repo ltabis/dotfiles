@@ -7,8 +7,13 @@
 - [[#personal][Personal]]
 - [[#theme][Theme]]
 - [[#line-numbers][Line numbers]]
-- [[#org-mode][Org Mode]]
 - [[#beacon][Beacon]]
+- [[#plantuml][PlantUML]]
+- [[#org-mode][Org Mode]]
+- [[#org-pomodoro][Org pomodoro]]
+- [[#org-journal][Org journal]]
+- [[#org-roam][Org Roam]]
+- [[#org-roam-ui][Org roam UI]]
 
 * Doom Comments
 Place your private configuration here! Remember, you do not need to run 'doom
@@ -92,15 +97,31 @@ numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 #+end_src
 
+* Beacon
+A minor mode that help locating the cursor after big movement.
+
+#+begin_src elisp
+(beacon-mode 1)
+#+end_src
+* PlantUML
+
+Generate UMLs from a few lines of code.
+
+#+begin_src elisp
+(setq
+ plantuml-default-exec-mode 'jar)  ; execute the binary instead of sending request to a server.
+#+end_src
+
 * Org Mode
 #+begin_src elisp
 (after! org
   ;; If you use `org' and don't want your org files in the default location below,
   ;; change `org-directory'.
-  (setq org-directory "~/org/")
-
-  ;; org files registered into the agenda.
-  (setq org-agenda-files '("~/org/todo.org" "~/org/agenda.org"))
+  (setq
+    org-directory "~/org/"
+    org-log-into-drawer t
+    org-agenda-files '("~/org/")
+    org-log-done 'time)
 
   ;; Register new templates here.
   (setq org-capture-templates
@@ -115,14 +136,53 @@ numbers are disabled. For relative line numbers, set this to `relative'.
          "* IDEA %?\n  %i\n")
 
         ("j" "journal entry" entry (file+datetree "~/org/journal.org")
-         "* %?\nEntered on %U\n  %i\n  %a"))
-      )
-)
+         "* %?\nEntered on %U\n  %i\n  %a"))))
 #+end_src
-
-* Beacon
-A minor mode that help locating the cursor after big movement.
+* Org pomodoro
 
 #+begin_src elisp
-(beacon-mode 1)
+
+#+end_src
+
+* Org journal
+
+An addon for journaling using org mode
+
+#+begin_src elisp
+(setq
+ org-journal-dir "~/org/journal/"
+ org-journal-date-prefix "#+TITLE:"     ; Org-mode style header.
+ org-journal-time-prefix "* "           ; Entries for the day are now top-level headers.
+ org-journal-file-format "%Y%m%d.org")  ; Make all journal entries org-mode.
+#+end_src
+
+* Org Roam
+
+Backlinks following the [[https://www.orgroam.com/manual.html#A-Brief-Introduction-to-the-Zettelkasten-Method][Zettelkasten Method]].
+Checkout the [[https://www.orgroam.com/manual.html#Setting-up-Org_002droam][org mode manual]] for more information.
+
+#+begin_src elisp
+(setq org-roam-directory (file-truename "~/org/knowledge")) ; file-truname is used to resolve symlimks, just in case.
+(org-roam-db-autosync-mode)
+#+end_src
+* Org roam UI
+
+configuratiom for org roam UI in the browser.
+
+#+begin_src elisp
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
 #+end_src
