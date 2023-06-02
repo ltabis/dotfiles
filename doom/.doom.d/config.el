@@ -18,8 +18,38 @@
   (setq
     org-directory "~/org/"
     org-log-into-drawer t
-    org-agenda-files '("~/org/")
     org-log-done 'time)
+
+  ;; Fancy priorities display for org mode.
+  (def-package! org-fancy-priority
+    :hook (org-mode . org-fancy-priority-mode)
+    :config
+    (setq org-fancy-priority-list '("A" "B" "C")))
+
+  ;; Agenda.
+  (setq
+    org-agenda-block-separator 8411
+    org-agenda-files '("~/org/")
+
+    org-priority-faces
+    '((?A :foreground "#ff6c6b" :weight bold)
+      (?B :foreground "#98be64" :weight bold)
+      (?C :foreground "#c678dd" :weight bold))
+
+    ;; Custom agenda view
+    org-agenda-custom-commands
+    '(("v" "A better agenda view"
+       ((tags "PRIORITY=\"A\""
+              ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+               (org-agenda-overriding-header "High-priority unfinished tasks:")))
+        (tags "PRIORITY=\"B\""
+              ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+               (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
+        (tags "PRIORITY=\"C\""
+              ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+               (org-agenda-overriding-header "Low-priority unfinished tasks:")))
+        (agenda "")
+        (alltodo "")))))
 
   ;; Register new templates here.
   (setq org-capture-templates
