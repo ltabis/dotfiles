@@ -15,7 +15,8 @@
 	use-package-expand-minimally t))
 
 (setq inhibit-startup-message t	; Don't show the splash screen.
-      visible-bell t)			; Blinks when reaching end or start of buffer.
+      visible-bell t			; Blinks when reaching end or start of buffer.
+      use-dialog-box nil)             ; Don't pop up UI dialogs when prompting
 (menu-bar-mode -1)			; Remove menu bar
 (tool-bar-mode -1)			; Remove tool bar
 (scroll-bar-mode -1)			; Remove scroll bar
@@ -25,6 +26,11 @@
 (global-display-line-numbers-mode 1)	; Shoe line numbers in every buffer.
 (recentf-mode 1)			; Remember recent edited files. TODO: add `recentf-open-files` shortcut.
 (save-place-mode 1)			; Point goes to the last place where it was when you previously visited the same file.
+(global-auto-revert-mode 1)		; Revert buffers when the underlying file has changed.
+
+;; Move customization variables to a separate file and load it.
+(setq custom-file (locate-user-emacs-file "custom-vars.el"))
+(load custom-file 'noerror 'nomessage)
 
 (use-package zenburn-theme
   :config (load-theme 'zenburn t))
@@ -41,6 +47,8 @@
   ("C->" . mc/mark-next-like-this)
   ("C-<" . 'mc/mark-next-like-this)
   ("C-c C-<" . 'mc/mark-all-like-this))
+
+(use-package deadgrep :bind ("<f5>" . deadgrep))
 
 (use-package beacon
   :config (beacon-mode 1))
@@ -85,7 +93,10 @@
 	   "* IDEA %?\n  %i\n")
 
 	  ("j" "journal entry" entry (file+datetree "~/org/journal.org")
-	   "* %?\nEntered on %U\n  %i\n  %a"))))
+	   "* %?\nEntered on %U\n  %i\n  %a")))
+  :bind
+  ("C-c a" . org-agenda)
+  ("C-c c" . org-capture))
 
 ;; Tangle org files on save.
 (use-package org-auto-tangle
