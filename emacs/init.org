@@ -11,7 +11,10 @@ Checkout the described packages using `package-list-packages`.
 *** TODO [#D] Dired.
 *** TODO [#C] Shortcuts.
 *** TODO [#C] Archiving.
-*** TODO [#C] Splash screen agenda
+*** TODO [#A] Hide NO items in agenda
+*** DONE [#C] Splash screen agenda
+CLOSED: [2023-06-04 Sun 11:13]
+
 
 * TABLE OF CONTENT :toc:
 * Packages
@@ -58,6 +61,9 @@ Emacs default variables customization.
   ;; Move customization variables to a separate file and load it.
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
+
+  ;; Load the agenda on startup.
+  (add-hook 'after-init-hook 'org-agenda-list)
 #+end_src
 
 * Emacs shortcuts and environment
@@ -66,10 +72,15 @@ Emacs default variables customization.
   (defvar lt/org-config-path "~/Projects/Config/dotfiles/emacs/init.org"
     "Path to the user's org configuration file.")
 
-  (defun lt/config ()
+  (defun lt/open-config ()
     "Open a buffer with the user's configuration."
     (interactive)
     (find-file lt/org-config-path))
+
+  (defun lt/reload-config ()
+    "Reload the .el configuration file."
+    (interactive)
+    (load-file user-init-file))
 #+end_src
 
 * Theme
@@ -160,26 +171,44 @@ Matching parens have colors.
     (setq
      org-directory "~/org/"
      org-log-into-drawer t
-     org-agenda-files '("~/org/gtd/")
+     org-agenda-files (file-expand-wildcards "~/org/gtd/*.org")
      org-log-done 'time
-     org-todo-keywords '((sequence "WAIT(w)" "IDEA(i)" "TODO(a)" "|" "DONE(d)" "DELEGATED"))
+     org-todo-keywords '((sequence "ABANDONNED(a)" "PROJECT(p)" "IDEA(i)" "WAITING(w)" "MAYBE(m)" "FIXME(f)" "TODO(t)" "|" "DONE(d)" "DELEGATED(e)"))
      org-todo-keyword-faces
-      '(("TODO" . org-warning)
-	("WAIT" . "yellow")
-	("IDEA" . "yellow")
-	("DONE" . "green")))
+     '(
+       ("FIXME" . org-warning)
+       ("TODO" . org-warning)
+       ("ABANDONNED" . org-warning)
+       ("WAITING" . "yellow")
+       ("IDEA" . "yellow")
+       ("PROJECT" . "blue")
+       ("MAYBE" . "green")
+       ("DONE" . "green"))
 
-    ;; Register new templates here.
-    (setq org-capture-templates
-	  '(
-	    ("a" "An precisly defined action" entry (file+headline "~/org/gtd/actions.org" "Actions")
-	     "* TODO %? %^G\n%^t\n%a\n")
+     ;; GTD style review agenda.
+     ;; https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html
+     org-agenda-custom-commands
+     '(("W" "Weekly Review"
+	((agenda "" ((org-agenda-span 7))); review upcoming deadlines and appointments
+					  ; type "l" in the agenda to review logged items 
+	 (stuck "") ; review stuck projects as designated by org-stuck-projects
+	 (todo "PROJECT") ; review all projects (assuming you use todo keywords to designate projects)
+	 (todo "MAYBE") ; review someday/maybe items
+	 (todo "WAITING"))) ; review waiting items
+       ;; ...other commands here
+       )
 
-	    ("c" "Capture a random thought" entry (file+headline "~/org/gtd/dump.org" "Ideas")
-	     "* IDEA %?\n %t %a\n")
+     ;; Register new templates here.
+     org-capture-templates
+     '(
+       ("a" "A precisely defined action" entry (file+headline "~/org/gtd/actions.org" "Actions")
+	"* TODO %? %^G\n%^t\n%a\n")
 
-	    ("j" "journal entry" entry (file+datetree "~/org/journal.org")
-	     "* %?\nEntered on %U\n  %i\n  %a\n")))
+       ("c" "Capture a random thought" entry (file+headline "~/org/gtd/dump.org" "Ideas")
+	"* IDEA %?\n %t %a\n")
+
+       ("j" "journal entry" entry (file+datetree "~/org/journal.org")
+	"* %?\nEntered on %U\n  %i\n  %a\n")))
     :bind
     ("C-c a" . org-switch-task)
     ("C-c a" . org-agenda)
