@@ -198,30 +198,27 @@ Matching parens have colors.
 			"~/org/gtd/actions.org"
 			"~/org/gtd/projects.org")
      org-log-done 'time
-     org-todo-keywords '((sequence "PROJECT(p)" "IDEA(i)" "WAITING(w)" "MAYBE(m)" "FIXME(f)" "TODO(t)" "|" "DONE(d)" "DELEGATED(e)" "DISCARDED(x)"))
+     org-todo-keywords
+     '((sequence
+	"TODO(t)"
+	"PROJECT(r)"
+	"IDEA(i)"
+	"WAITING(w)"
+	"MAYBE(m)"
+	"FIXME(f)"
+	"|"
+	"DONE(d)"
+	"DELEGATED(e)"
+	"CANCELLED(c)"))
      org-todo-keyword-faces
      '(("FIXME" . org-warning)
        ("TODO" . org-warning)
-       ("DISCARDED" . "grey")
+       ("CANCELLED" . "grey")
        ("WAITING" . "yellow")
        ("IDEA" . "yellow")
        ("PROJECT" . "blue")
        ("MAYBE" . "green")
        ("DONE" . "green"))
-
-     ;; ;; GTD style review agenda.
-     ;; ;; https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html
-     ;; org-agenda-custom-commands
-     ;; '(("W" "Weekly Review"
-     ;;    ((agenda "" ((org-agenda-span 7))); review upcoming deadlines and appointments
-     ;; 					; type "l" in the agenda to review logged items 
-     ;;     (stuck "") ; review stuck projects as designated by org-stuck-projects
-     ;;     (todo "PROJECT") ; review all projects (assuming you use todo keywords to designate projects)
-     ;;     (todo "MAYBE") ; review someday/maybe items
-     ;;     (todo "WAITING"))) ; review waiting items
-     ;;   ;; ...other commands h
-     ;;       ere
-     ;;     )
 
      ;; Register new templates here.
      org-capture-templates
