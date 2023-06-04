@@ -32,6 +32,14 @@
 (setq custom-file (locate-user-emacs-file "custom-vars.el"))
 (load custom-file 'noerror 'nomessage)
 
+(defvar lt/org-config-path "~/Projects/Config/dotfiles/emacs/init.org"
+  "Path to the user's org configuration file.")
+
+(defun lt/config ()
+  "Open a buffer with the user's configuration."
+  (interactive)
+  (find-file lt/org-config-path))
+
 (use-package zenburn-theme
   :config (load-theme 'zenburn t))
 
@@ -67,34 +75,37 @@
   (setq hl-todo-keyword-faces
 	'(("TODO"   . "#FF0000")
 	  ("FIXME"  . "#FF0000")
-	  ("DEBUG"  . "#A020F0")
+	  ("PERF"   . "#A020F0")
 	  ("NOTE"   . "#A020F0")
-	  ("GOTCHA" . "#FF4500")
-	  ("STUB"   . "#1E90FF"))))
+	  ("IDEA"   . "#A020F0"))))
 
 (use-package org
   :config
   (setq
    org-directory "~/org/"
    org-log-into-drawer t
-   org-agenda-files '("~/org/")
-   org-log-done 'time)
+   org-agenda-files '("~/org/gtd/")
+   org-log-done 'time
+   org-todo-keywords '((sequence "WAIT(w)" "IDEA(i)" "TODO(a)" "|" "DONE(d)" "DELEGATED"))
+   org-todo-keyword-faces
+    '(("TODO" . org-warning)
+      ("WAIT" . "yellow")
+      ("IDEA" . "yellow")
+      ("DONE" . "green")))
 
   ;; Register new templates here.
   (setq org-capture-templates
 	'(
-	  ("t" "simple todo" entry (file+headline "~/org/todo.org" "Tasks")
-	   "* TODO %?\n  %i\n")
+	  ("a" "An precisly defined action" entry (file+headline "~/org/gtd/actions.org" "Actions")
+	   "* TODO %? %^G\n%^t\n%a\n")
 
-	  ("a" "tracked todo" entry (file+headline "~/org/todo.org" "Tasks")
-	   "* TODO %?\n  %i\n  %a")
-
-	  ("i" "simple idea" entry (file+headline "~/org/idea.org" "Ideas")
-	   "* IDEA %?\n  %i\n")
+	  ("c" "Capture a random thought" entry (file+headline "~/org/gtd/dump.org" "Ideas")
+	   "* IDEA %?\n %t %a\n")
 
 	  ("j" "journal entry" entry (file+datetree "~/org/journal.org")
-	   "* %?\nEntered on %U\n  %i\n  %a")))
+	   "* %?\nEntered on %U\n  %i\n  %a\n")))
   :bind
+  ("C-c a" . org-switch-task)
   ("C-c a" . org-agenda)
   ("C-c c" . org-capture))
 
@@ -105,7 +116,13 @@
 
 (use-package org-fancy-priorities
   :hook (org-mode . org-fancy-priorities-mode)
-  :config (setq org-fancy-priorities-list '("🔴" "🟡" "🟢" "⚪")))
+  :config
+  (setq org-fancy-priorities-list '("H" "M" "L" "O")
+  org-priority-faces
+  '((?A :foreground "#ff0000" :weight bold)
+    (?B :foreground "#ffff00" :weight bold)
+    (?C :foreground "#00ff00" :weight bold)
+    (?D :foreground "#ffffff" :weight bold))))
 
 (use-package org-journal
   :config
@@ -121,7 +138,10 @@
 (use-package org-roam
   :config
   (setq org-roam-directory (file-truename "~/org/knowledge")) ; file-truname is used to resolve symlimks, just in case.
-  (org-roam-db-autosync-mode))
+  (org-roam-db-autosync-mode)
+  :bind
+  ("C-c r f" . org-roam-node-find)
+  ("C-c r i" . org-roam-node-insert))
 
 (use-package org-roam-ui
   :config
