@@ -11,6 +11,7 @@ Checkout the described packages using `package-list-packages`.
 *** TODO [#D] Dired.
 *** TODO [#C] Shortcuts.
 *** TODO Flycheck + Apheleia
+*** TODO [#D] Customize bar
 *** DONE [#C] Archiving.
 CLOSED: [2023-06-04 Sun 16:39]
 *** DONE [#A] Hide NO items in agenda
@@ -72,7 +73,8 @@ Emacs default variables customization.
 * Emacs shortcuts and environment
 
 #+begin_src elisp
-  (defvar lt/org-config-path "~/Projects/Config/dotfiles/emacs/init.org"
+  (defvar lt/org-config-path
+    (concat (file-name-sans-extension (file-truename user-init-file)) ".org")
     "Path to the user's org configuration file.")
 
   (defun lt/open-config ()
@@ -192,9 +194,9 @@ Matching parens have colors.
     (setq
      org-directory "~/org/"
      org-log-into-drawer t
-     org-agenda-files '(("~/org/gtd/rituals.org"
+     org-agenda-files '("~/org/gtd/rituals.org"
 			"~/org/gtd/actions.org"
-			"~/org/gtd/projects.org"))
+			"~/org/gtd/projects.org")
      org-log-done 'time
      org-todo-keywords '((sequence "PROJECT(p)" "IDEA(i)" "WAITING(w)" "MAYBE(m)" "FIXME(f)" "TODO(t)" "|" "DONE(d)" "DELEGATED(e)" "DISCARDED(x)"))
      org-todo-keyword-faces
@@ -207,18 +209,19 @@ Matching parens have colors.
        ("MAYBE" . "green")
        ("DONE" . "green"))
 
-     ;; GTD style review agenda.
-     ;; https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html
-     org-agenda-custom-commands
-     '(("W" "Weekly Review"
-	((agenda "" ((org-agenda-span 7))); review upcoming deadlines and appointments
-					  ; type "l" in the agenda to review logged items 
-	 (stuck "") ; review stuck projects as designated by org-stuck-projects
-	 (todo "PROJECT") ; review all projects (assuming you use todo keywords to designate projects)
-	 (todo "MAYBE") ; review someday/maybe items
-	 (todo "WAITING"))) ; review waiting items
-       ;; ...other commands here
-       )
+     ;; ;; GTD style review agenda.
+     ;; ;; https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html
+     ;; org-agenda-custom-commands
+     ;; '(("W" "Weekly Review"
+     ;;    ((agenda "" ((org-agenda-span 7))); review upcoming deadlines and appointments
+     ;; 					; type "l" in the agenda to review logged items 
+     ;;     (stuck "") ; review stuck projects as designated by org-stuck-projects
+     ;;     (todo "PROJECT") ; review all projects (assuming you use todo keywords to designate projects)
+     ;;     (todo "MAYBE") ; review someday/maybe items
+     ;;     (todo "WAITING"))) ; review waiting items
+     ;;   ;; ...other commands h
+     ;;       ere
+     ;;     )
 
      ;; Register new templates here.
      org-capture-templates

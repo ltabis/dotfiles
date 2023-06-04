@@ -35,7 +35,8 @@
 ;; Load the agenda on startup.
 (add-hook 'after-init-hook 'org-agenda-list)
 
-(defvar lt/org-config-path "~/Projects/Config/dotfiles/emacs/init.org"
+(defvar lt/org-config-path
+  (concat (file-name-sans-extension (file-truename user-init-file)) ".org")
   "Path to the user's org configuration file.")
 
 (defun lt/open-config ()
@@ -102,12 +103,11 @@
    org-log-into-drawer t
    org-agenda-files '("~/org/gtd/rituals.org"
 		      "~/org/gtd/actions.org"
-		      "~/org/gtd/projects.org"))
+		      "~/org/gtd/projects.org")
    org-log-done 'time
    org-todo-keywords '((sequence "PROJECT(p)" "IDEA(i)" "WAITING(w)" "MAYBE(m)" "FIXME(f)" "TODO(t)" "|" "DONE(d)" "DELEGATED(e)" "DISCARDED(x)"))
    org-todo-keyword-faces
-   '(
-     ("FIXME" . org-warning)
+   '(("FIXME" . org-warning)
      ("TODO" . org-warning)
      ("DISCARDED" . "grey")
      ("WAITING" . "yellow")
@@ -116,18 +116,19 @@
      ("MAYBE" . "green")
      ("DONE" . "green"))
 
-   ;; GTD style review agenda.
-   ;; https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html
-   org-agenda-custom-commands
-   '(("W" "Weekly Review"
-      ((agenda "" ((org-agenda-span 7))); review upcoming deadlines and appointments
-					; type "l" in the agenda to review logged items 
-       (stuck "") ; review stuck projects as designated by org-stuck-projects
-       (todo "PROJECT") ; review all projects (assuming you use todo keywords to designate projects)
-       (todo "MAYBE") ; review someday/maybe items
-       (todo "WAITING"))) ; review waiting items
-     ;; ...other commands here
-     )
+   ;; ;; GTD style review agenda.
+   ;; ;; https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html
+   ;; org-agenda-custom-commands
+   ;; '(("W" "Weekly Review"
+   ;;    ((agenda "" ((org-agenda-span 7))); review upcoming deadlines and appointments
+   ;; 					; type "l" in the agenda to review logged items 
+   ;;     (stuck "") ; review stuck projects as designated by org-stuck-projects
+   ;;     (todo "PROJECT") ; review all projects (assuming you use todo keywords to designate projects)
+   ;;     (todo "MAYBE") ; review someday/maybe items
+   ;;     (todo "WAITING"))) ; review waiting items
+   ;;   ;; ...other commands h
+   ;;       ere
+   ;;     )
 
    ;; Register new templates here.
    org-capture-templates
