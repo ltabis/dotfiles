@@ -69,6 +69,14 @@
 (use-package beacon
   :config (beacon-mode 1))
 
+(use-package ivy
+  :config
+  (ivy-mode)
+  (setq ivy-use-virtual-buffers t
+	enable-recursive-minibuffers t))
+
+(use-package yasnippet)
+
 (use-package rainbow-delimiters :hook (prog-mode-hook . rainbow-delimiters-mode))
 
 (use-package hl-todo
@@ -92,14 +100,16 @@
   (setq
    org-directory "~/org/"
    org-log-into-drawer t
-   org-agenda-files (file-expand-wildcards "~/org/gtd/*.org")
+   org-agenda-files '("~/org/gtd/rituals.org"
+		      "~/org/gtd/actions.org"
+		      "~/org/gtd/projects.org"))
    org-log-done 'time
-   org-todo-keywords '((sequence "ABANDONNED(a)" "PROJECT(p)" "IDEA(i)" "WAITING(w)" "MAYBE(m)" "FIXME(f)" "TODO(t)" "|" "DONE(d)" "DELEGATED(e)"))
+   org-todo-keywords '((sequence "PROJECT(p)" "IDEA(i)" "WAITING(w)" "MAYBE(m)" "FIXME(f)" "TODO(t)" "|" "DONE(d)" "DELEGATED(e)" "DISCARDED(x)"))
    org-todo-keyword-faces
    '(
      ("FIXME" . org-warning)
      ("TODO" . org-warning)
-     ("ABANDONNED" . org-warning)
+     ("DISCARDED" . "grey")
      ("WAITING" . "yellow")
      ("IDEA" . "yellow")
      ("PROJECT" . "blue")
@@ -123,7 +133,7 @@
    org-capture-templates
    '(
      ("a" "A precisely defined action" entry (file+headline "~/org/gtd/actions.org" "Actions")
-      "* TODO %? %^G\n%^t\n%a\n")
+      "* TODO %? %^G\n%^t\n")
 
      ("c" "Capture a random thought" entry (file+headline "~/org/gtd/dump.org" "Ideas")
       "* IDEA %?\n %t %a\n")
